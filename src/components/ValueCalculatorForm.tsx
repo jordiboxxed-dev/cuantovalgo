@@ -9,7 +9,7 @@ import type { CalculationParams, Category } from "@/lib/valuationData";
 import { Utensils, PartyPopper, Car, Dices } from "lucide-react";
 
 interface ValueCalculatorFormProps {
-  onCalculate: (params: CalculationParams) => void;
+  onCalculate: (params: CalculationParams & { name: string }) => void;
 }
 
 const categoryIcons = {
@@ -32,7 +32,7 @@ export const ValueCalculatorForm: React.FC<ValueCalculatorFormProps> = ({ onCalc
       return;
     }
     setError(null);
-    onCalculate({ age, category });
+    onCalculate({ age, category, name });
   };
 
   return (

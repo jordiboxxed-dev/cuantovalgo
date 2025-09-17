@@ -6,14 +6,17 @@ import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const Index = () => {
   const [result, setResult] = React.useState<CalculationResult | null>(null);
+  const [userName, setUserName] = React.useState("");
 
-  const handleCalculate = (params: CalculationParams) => {
+  const handleCalculate = (params: CalculationParams & { name: string }) => {
     const calculatedResult = calculateValue(params);
     setResult(calculatedResult);
+    setUserName(params.name);
   };
 
   const handleReset = () => {
     setResult(null);
+    setUserName("");
   };
 
   return (
@@ -34,7 +37,7 @@ const Index = () => {
             </div>
           </>
         ) : (
-          <ValueResult result={result} onReset={handleReset} />
+          <ValueResult result={result} onReset={handleReset} userName={userName} />
         )}
       </main>
       <footer className="w-full pt-8">
