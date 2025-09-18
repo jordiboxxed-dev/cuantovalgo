@@ -4,7 +4,7 @@ import { ValueCertificate } from "@/components/ValueCertificate";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { OnboardingModal } from "@/components/OnboardingModal";
 import { calculateValue, type CalculationParams, type CalculationResult, type Persona } from "@/lib/valuationData";
-import { MadeWithDyad } from "@/components/made-with-dyad";
+import { Fizz } from "@/components/Fizz";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Index = () => {
@@ -76,7 +76,7 @@ const Index = () => {
         {renderContent()}
       </main>
       <footer className="w-full pt-8">
-        <MadeWithDyad />
+        <Fizz />
       </footer>
     </div>
   );
