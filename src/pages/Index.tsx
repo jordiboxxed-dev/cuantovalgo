@@ -7,6 +7,7 @@ import { calculateValue, type CalculationParams, type CalculationResult, type Pe
 import { Fizz } from "@/components/Fizz";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { supabase } from "@/integrations/supabase/client";
+import { UserCount } from "@/components/UserCount";
 
 const Index = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -84,7 +85,10 @@ const Index = () => {
       <main className="w-full flex flex-col items-center justify-center flex-grow text-center">
         {renderContent()}
       </main>
-      <footer className="w-full pt-8">
+      <div className="w-full py-4">
+        <UserCount />
+      </div>
+      <footer className="w-full pt-4">
         <Fizz />
       </footer>
     </div>
