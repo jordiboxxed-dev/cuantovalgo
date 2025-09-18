@@ -9,7 +9,7 @@ import type { CalculationParams, Category } from "@/lib/valuationData";
 import { Utensils, PartyPopper, Car, Dices } from "lucide-react";
 
 interface ValueCalculatorFormProps {
-  onCalculate: (params: CalculationParams & { name: string }) => void;
+  onCalculate: (params: Omit<CalculationParams, 'persona'> & { name: string }) => void;
 }
 
 const categoryIcons = {

@@ -2,22 +2,38 @@ import * as React from "react";
 import { ValueCalculatorForm } from "@/components/ValueCalculatorForm";
 import { ValueResult } from "@/components/ValueResult";
 import { LoadingScreen } from "@/components/LoadingScreen";
-import { calculateValue, type CalculationParams, type CalculationResult } from "@/lib/valuationData";
+import { OnboardingModal } from "@/components/OnboardingModal";
+import { calculateValue, type CalculationParams, type CalculationResult, type Persona } from "@/lib/valuationData";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const Index = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [result, setResult] = React.useState<CalculationResult | null>(null);
   const [userName, setUserName] = React.useState("");
+  const [showOnboarding, setShowOnboarding] = React.useState(false);
+  const [userPersona, setUserPersona] = React.useState<Persona | null>(null);
 
-  const handleCalculate = (params: CalculationParams & { name: string }) => {
+  React.useEffect(() => {
+    const hasOnboarded = localStorage.getItem("hasCompletedOnboarding");
+    if (!hasOnboarded) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleOnboardingComplete = (persona: Persona) => {
+    setUserPersona(persona);
+    localStorage.setItem("hasCompletedOnboarding", "true");
+    setShowOnboarding(false);
+  };
+
+  const handleCalculate = (params: Omit<CalculationParams, 'persona'> & { name: string }) => {
     setIsLoading(true);
     setTimeout(() => {
-      const calculatedResult = calculateValue(params);
+      const calculatedResult = calculateValue({ ...params, persona: userPersona });
       setResult(calculatedResult);
       setUserName(params.name);
       setIsLoading(false);
-    }, 3500); // Simulate a loading time
+    }, 3500);
   };
 
   const handleReset = () => {
@@ -51,6 +67,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-brand-start to-brand-end text-gray-800 dark:text-white">
+      <OnboardingModal isOpen={showOnboarding} onComplete={handleOnboardingComplete} />
       <main className="w-full flex flex-col items-center justify-center flex-grow text-center">
         {renderContent()}
       </main>
