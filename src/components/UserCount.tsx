@@ -36,15 +36,18 @@ export const UserCount = () => {
     );
   }
 
-  // No mostramos nada si el conteo es muy bajo para no parecer impopular
-  if (count === null || count < 5) {
+  // Corregido: No mostramos nada solo si hay un error al obtener el dato.
+  if (count === null) {
     return null;
   }
+
+  const communityName = count === 1 ? "Valioso" : "Valiosos";
+  const verb = count === 1 ? "Hay" : "Somos";
 
   return (
     <div className="flex items-center justify-center gap-2 text-white/80 font-semibold animate-in fade-in duration-500">
       <Users className="h-5 w-5 text-neon-yellow" />
-      <span>¡Ya somos <span className="font-bold text-white text-lg">{count}</span> Valiosos en la comunidad!</span>
+      <span>¡Ya {verb} <span className="font-bold text-white text-lg">{count}</span> {communityName} en la comunidad!</span>
     </div>
   );
 };
