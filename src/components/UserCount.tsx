@@ -7,25 +7,42 @@ export const UserCount = () => {
   const [count, setCount] = React.useState<number | null>(null);
   const [loading, setLoading] = React.useState(true);
 
-  React.useEffect(() => {
-    const fetchCount = async () => {
-      // Pequeña demora para una mejor percepción de carga
-      await new Promise(resolve => setTimeout(resolve, 500));
+  const fetchCount = React.useCallback(async () => {
+    const { count, error } = await supabase
+      .from('app_usage')
+      .select('*', { count: 'exact', head: true });
 
-      const { count, error } = await supabase
-        .from('app_usage')
-        .select('*', { count: 'exact', head: true });
-
-      if (error) {
-        console.error("Error al obtener el conteo de usuarios:", error);
-      } else {
-        setCount(count);
-      }
-      setLoading(false);
-    };
-
-    fetchCount();
+    if (error) {
+      console.error("Error al obtener el conteo de usuarios:", error);
+      setCount(null);
+    } else {
+      setCount(count);
+    }
+    setLoading(false);
   }, []);
+
+  React.useEffect(() => {
+    // Carga inicial
+    fetchCount();
+
+    // Escuchar cambios en tiempo real
+    const channel = supabase
+      .channel('app_usage_realtime')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'app_usage' },
+        () => {
+          // Cuando hay un nuevo usuario, actualizamos el contador
+          setCount(currentCount => (currentCount || 0) + 1);
+        }
+      )
+      .subscribe();
+
+    // Limpiar la suscripción al desmontar el componente
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [fetchCount]);
 
   if (loading) {
     return (
@@ -36,7 +53,6 @@ export const UserCount = () => {
     );
   }
 
-  // Corregido: No mostramos nada solo si hay un error al obtener el dato.
   if (count === null) {
     return null;
   }
