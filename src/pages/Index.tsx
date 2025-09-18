@@ -6,6 +6,7 @@ import { OnboardingModal } from "@/components/OnboardingModal";
 import { calculateValue, type CalculationParams, type CalculationResult, type Persona } from "@/lib/valuationData";
 import { Fizz } from "@/components/Fizz";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -21,10 +22,18 @@ const Index = () => {
     }
   }, []);
 
-  const handleOnboardingComplete = (persona: Persona) => {
+  const handleOnboardingComplete = async (persona: Persona) => {
     setUserPersona(persona);
     localStorage.setItem("hasCompletedOnboarding", "true");
     setShowOnboarding(false);
+
+    const { error } = await supabase
+      .from('app_usage')
+      .insert([{ persona: persona }]);
+
+    if (error) {
+      console.error('Error logging usage to Supabase:', error.message);
+    }
   };
 
   const handleCalculate = (params: Omit<CalculationParams, 'persona'> & { name: string }) => {
