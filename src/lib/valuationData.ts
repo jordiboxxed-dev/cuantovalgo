@@ -61,7 +61,47 @@ export interface CalculationResult {
   quantity: number;
   item: Item;
   totalValue: number;
+  title: string;
+  stats: { label: string; value: string }[];
 }
+
+const generateTitle = (item: Item): string => {
+  const titles: { [key: string]: string[] } = {
+    "Milanesas con fritas": ["Maestro/a de la Milanga", "Barón/esa de la Fritura"],
+    "Fernet con coca": ["Capitán/a del Fernet", "Duque/sa de Córdoba"],
+    "Pasajes de avión a Bariloche": ["Explorador/a de la Patagonia", "Nómada de la Cordillera"],
+    "Suscripciones a Netflix": ["Sultán/a del Sillón", "Monarca del Streaming"],
+    "default": ["Gerente General de la Buena Vida", "CEO de las Decisiones Cuestionables"],
+  };
+  const options = titles[item.name] || titles.default;
+  return options[Math.floor(Math.random() * options.length)];
+};
+
+const generateStats = (age: number, persona: Persona | null): { label: string; value: string }[] => {
+  const stats = [
+    { label: "Nivel de Facha", value: `${Math.floor(Math.random() * 51) + 50}%` },
+    { label: "Potencial de Asado", value: ["Nulo", "Aprendiz", "Cebador", "Maestro Parrillero"][Math.floor(Math.random() * 4)] },
+    { label: "Sabiduría Popular", value: age > 40 ? "Nivel Dios" : "En desarrollo" },
+  ];
+
+  switch (persona) {
+    case "fiestero":
+      stats.push({ label: "Resistencia a la Resaca", value: "Legendaria" });
+      break;
+    case "foodie":
+      stats.push({ label: "Paladar Exigente", value: "Crítico" });
+      break;
+    case "casero":
+      stats.push({ label: "Comodidad en Pantuflas", value: "Extrema" });
+      break;
+    case "aventurero":
+      stats.push({ label: "Ganas de Escaparse", value: "Incontrolables" });
+      break;
+    default:
+      stats.push({ label: "Factor Sorpresa", value: "Peligrosamente Alto" });
+  }
+  return stats;
+};
 
 export const calculateValue = ({ age, category, persona }: CalculationParams): CalculationResult => {
   const baseValue = Math.random() * (150 - 15) + 15;
@@ -94,5 +134,7 @@ export const calculateValue = ({ age, category, persona }: CalculationParams): C
     quantity,
     item: randomItem,
     totalValue,
+    title: generateTitle(randomItem),
+    stats: generateStats(age, persona),
   };
 };

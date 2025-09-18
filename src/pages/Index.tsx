@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ValueCalculatorForm } from "@/components/ValueCalculatorForm";
-import { ValueResult } from "@/components/ValueResult";
+import { ValueCertificate } from "@/components/ValueCertificate";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { OnboardingModal } from "@/components/OnboardingModal";
 import { calculateValue, type CalculationParams, type CalculationResult, type Persona } from "@/lib/valuationData";
@@ -47,7 +47,7 @@ const Index = () => {
       return <LoadingScreen />;
     }
     if (result) {
-      return <ValueResult result={result} onReset={handleReset} userName={userName} />;
+      return <ValueCertificate result={result} onReset={handleReset} userName={userName} />;
     }
     return (
       <>
