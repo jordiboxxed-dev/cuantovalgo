@@ -25,7 +25,11 @@ const personas: { id: Persona; label: string; icon: React.ReactNode }[] = [
 export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComplete }) => {
   return (
     <Dialog open={isOpen}>
-      <DialogContent className="bg-white/90 dark:bg-black/90 backdrop-blur-sm border-2 border-white/50 rounded-3xl shadow-2xl">
+      <DialogContent 
+        onEscapeKeyDown={(e) => e.preventDefault()}
+        onPointerDownOutside={(e) => e.preventDefault()}
+        className="bg-white/90 dark:bg-black/90 backdrop-blur-sm border-2 border-white/50 rounded-3xl shadow-2xl [&>button]:hidden"
+      >
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold text-center text-brand-start">¡Bienvenid@!</DialogTitle>
           <DialogDescription className="text-center text-lg pt-2">
