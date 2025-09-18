@@ -5,6 +5,7 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { OnboardingModal } from "@/components/OnboardingModal";
 import { calculateValue, type CalculationParams, type CalculationResult, type Persona } from "@/lib/valuationData";
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Index = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -66,7 +67,10 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-brand-start to-brand-end text-gray-800 dark:text-white">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-brand-start to-brand-end text-gray-800 dark:text-white relative">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
       <OnboardingModal isOpen={showOnboarding} onComplete={handleOnboardingComplete} />
       <main className="w-full flex flex-col items-center justify-center flex-grow text-center">
         {renderContent()}
